@@ -1,0 +1,69 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+struct Meet
+{
+	int begin;	//会议开始时间
+	int end;	//会议结束时间
+	int num;	//记录会议的编号
+}meet[1000];	
+
+class setMeet {
+public:
+	void init();
+	void solve();
+private:
+	int n, ans;		//n:会议总数；ans：最大的会议安排总数
+};
+
+void setMeet::init()
+{
+	int s, e;
+	cin >> n;
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		cin >> s >> e;
+		meet[i].begin = s;
+		meet[i].end = e;
+		meet[i].num = i + 1;
+	}
+}
+
+bool cmp(Meet x, Meet y)
+{
+	if (x.end == y.end)
+		return x.begin > y.begin;
+	return x.end < y.end;
+}
+
+void setMeet::solve()
+{
+	sort(meet, meet + n, cmp);
+	for (int i = 0; i < n; i++)
+	{
+		cout<< meet[i].num << "\t\t" << meet[i].begin << "\t" << meet[i].end << endl;
+	}
+	cout << meet[0].num << endl;
+	ans = 1;
+	int last = meet[0].end;
+	for (int i = 1; i < n; i++)
+	{
+		if (meet[i].begin >= last)
+		{
+			ans++;
+			last = meet[i].end;
+			cout << meet[i].num << endl;
+		}
+	}
+	cout << "可安排" << ans << endl;
+}
+
+int main()
+{
+	setMeet sm;
+	sm.init();		//读入数据
+	sm.solve();		//贪心算法求解
+	return 0;
+}
